@@ -1,191 +1,223 @@
 import json
 import os
+import datetime # Adicionado para validação de data
 
-TASKS_FILE = "tasks.json"
+ARQUIVO_TAREFAS = "tasks.json"
+STATUS_PENDENTE = "pendente"
+STATUS_CONCLUIDA = "concluída"
 
-def load_tasks():
+def carregar_tarefas():
     """Carrega as tarefas do arquivo JSON."""
-    if not os.path.exists(TASKS_FILE):
+    if not os.path.exists(ARQUIVO_TAREFAS):
         return []
     try:
-        with open(TASKS_FILE, 'r', encoding='utf-8') as f:
-            tasks = json.load(f)
-            return tasks
+        with open(ARQUIVO_TAREFAS, 'r', encoding='utf-8') as f:
+            tarefas = json.load(f)
+            # Validação básica para garantir que temos uma lista de dicionários
+            if not isinstance(tarefas, list) or not all(isinstance(t, dict) for t in tarefas):
+                print("Formato de arquivo de tarefas inválido. Iniciando com lista vazia.")
+                return []
+            return tarefas
     except (json.JSONDecodeError, IOError) as e:
-        print(f"Erro ao carregar as tarefas: {e}")
-        return [] 
+        print(f"Erro ao carregar as tarefas: {e}. Iniciando com lista vazia.")
+        return []
 
-def save_tasks(tasks):
+def salvar_tarefas(tarefas):
     """Salva a lista de tarefas no arquivo JSON."""
     try:
-        with open(TASKS_FILE, 'w', encoding='utf-8') as f:
-            json.dump(tasks, f, indent=2, ensure_ascii=False)
+        with open(ARQUIVO_TAREFAS, 'w', encoding='utf-8') as f:
+            json.dump(tarefas, f, indent=2, ensure_ascii=False)
     except IOError as e:
         print(f"Erro ao salvar as tarefas: {e}")
 
-def display_tasks(tasks):
+def _validar_formato_data(data_str):
+    """Valida se a string da data está no formato AAAA-MM-DD."""
+    try:
+        datetime.datetime.strptime(data_str, '%Y-%m-%d')
+        return True
+    except ValueError:
+        return False
+
+def exibir_tarefas(tarefas):
     """Exibe a lista de tarefas de forma organizada."""
-    if not tasks:
-        print("Nenhuma tarefa encontrada.")
+    if not tarefas:
+        print("\nNenhuma tarefa cadastrada ainda.")
         return
 
-    print("\n--- Lista de Tarefas ---")
-    for task in tasks:
-        print(f"  ID: {task.get('id')}")
-        print(f"  Título: {task.get('title')}")
-        print(f"  Status: {task.get('status')}")
-        print(f"  Data de Entrega: {task.get('dueDate')}")
+    print("\n--- Sua Lista de Tarefas ---")
+    for tarefa in tarefas:
+        status_legivel = "Concluída ✅" if tarefa.get('status') == STATUS_CONCLUIDA else "Pendente ⏳"
+        data_entrega = tarefa.get('dueDate') or "Não definida"
+        print(f"  ID: {tarefa.get('id')}")
+        print(f"  Título: {tarefa.get('title')}")
+        print(f"  Status: {status_legivel}")
+        print(f"  Data de Entrega: {data_entrega}")
         print("  --------------------")
 
-def add_task(tasks):
+def adicionar_tarefa(tarefas):
     """Adiciona uma nova tarefa à lista."""
     print("\n--- Adicionar Nova Tarefa ---")
-    title = input("Digite o título da tarefa: ")
-    dueDate = input("Digite a data de entrega (ex: AAAA-MM-DD): ")
+    titulo = input("Qual o título da tarefa? ").str0ip()
+    if not titulo:
+        print("O título não pode ser vazio. Tarefa não adicionada.")
+        return
 
-    new_id = 1
-    if tasks:
-        ids = [task.get('id', 0) for task in tasks if isinstance(task.get('id'), int)]
-        if ids:
-            new_id = max(ids) + 1
+    while True:
+        data_entrega_str = input("Qual a data de entrega (AAAA-MM-DD, deixe em branco se não houver)? ").strip()
+        if not data_entrega_str or _validar_formato_data(data_entrega_str):
+            break
+        print("Formato de data inválido. Por favor, use AAAA-MM-DD ou deixe em branco.")
 
-    new_task = {
-        "id": new_id,
-        "title": title,
-        "status": "pending",
-        "dueDate": dueDate
+    novo_id = 1
+    if tarefas:
+        ids_existentes = [t.get('id', 0) for t in tarefas if isinstance(t.get('id'), int)]
+        if ids_existentes:
+            novo_id = max(ids_existentes) + 1
+
+    nova_tarefa = {
+        "id": novo_id,
+        "title": titulo,
+        "status": STATUS_PENDENTE,
+        "dueDate": data_entrega_str if data_entrega_str else None
     }
-    tasks.append(new_task)
-    print(f"Tarefa \'{title}\' adicionada com sucesso!")
+    tarefas.append(nova_tarefa)
+    print(f"\nTarefa '{titulo}' adicionada com sucesso! ID: {novo_id}")
 
-def mark_task_done(tasks):
+def _obter_id_tarefa_do_usuario(mensagem_prompt="Digite o ID da tarefa: "):
+    """Solicita ao usuário um ID de tarefa e garante que seja um número."""
+    while True:
+        try:
+            id_str = input(mensagem_prompt)
+            return int(id_str)
+        except ValueError:
+            print("ID inválido. Por favor, digite um número.")
+
+def _encontrar_tarefa_por_id(tarefas, id_tarefa):
+    """Encontra uma tarefa na lista pelo seu ID."""
+    for tarefa in tarefas:
+        if tarefa.get('id') == id_tarefa:
+            return tarefa
+    return None
+
+def marcar_tarefa_concluida(tarefas):
     """Marca uma tarefa como concluída."""
     print("\n--- Marcar Tarefa como Concluída ---")
-    display_tasks(tasks)
-    if not tasks:
+    if not tarefas:
+        print("Nenhuma tarefa para marcar.")
         return
 
-    try:
-        task_id_str = input("Digite o ID da tarefa que deseja marcar como concluída: ")
-        task_id = int(task_id_str)
-    except ValueError:
-        print("ID inválido. Por favor, digite um número.")
-        return
+    exibir_tarefas(tarefas) # Mostrar tarefas para facilitar a escolha do ID
+    id_tarefa = _obter_id_tarefa_do_usuario("Digite o ID da tarefa para marcar como concluída: ")
 
-    task_found = False
-    for task in tasks:
-        if task.get('id') == task_id:
-            task['status'] = "done"
-            print(f"Tarefa '{task.get('title')}' (ID: {task_id}) marcada como concluída!")
-            task_found = True
-            break
-    
-    if not task_found:
-        print(f"Tarefa com ID {task_id} não encontrada.")
+    tarefa = _encontrar_tarefa_por_id(tarefas, id_tarefa)
 
-def delete_task(tasks):
+    if tarefa:
+        if tarefa['status'] == STATUS_CONCLUIDA:
+            print(f"A tarefa '{tarefa.get('title')}' (ID: {id_tarefa}) já estava marcada como concluída.")
+        else:
+            tarefa['status'] = STATUS_CONCLUIDA
+            print(f"Tarefa '{tarefa.get('title')}' (ID: {id_tarefa}) marcada como concluída! 🎉")
+    else:
+        print(f"Tarefa com ID {id_tarefa} não encontrada. 🤔")
+
+def excluir_tarefa(tarefas):
     """Exclui uma tarefa da lista."""
     print("\n--- Excluir Tarefa ---")
-    display_tasks(tasks)
-    if not tasks:
+    if not tarefas:
+        print("Nenhuma tarefa para excluir.")
         return
 
-    try:
-        task_id_str = input("Digite o ID da tarefa que deseja excluir: ")
-        task_id = int(task_id_str)
-    except ValueError:
-        print("ID inválido. Por favor, digite um número.")
-        return
+    exibir_tarefas(tarefas)
+    id_tarefa = _obter_id_tarefa_do_usuario("Digite o ID da tarefa que deseja excluir: ")
 
-    original_task_count = len(tasks)
-    tasks_to_keep = [task for task in tasks if task.get('id') != task_id]
-    
-    if len(tasks_to_keep) < original_task_count:
-        tasks.clear()
-        tasks.extend(tasks_to_keep)
-        print(f"Tarefa com ID {task_id} excluída com sucesso!")
+    tarefa = _encontrar_tarefa_por_id(tarefas, id_tarefa)
+
+    if tarefa:
+        confirmacao = input(f"Tem certeza que deseja excluir a tarefa '{tarefa.get('title')}' (ID: {id_tarefa})? (s/N): ").strip().lower()
+        if confirmacao == 's':
+            tarefas.remove(tarefa) # Mais direto se o objeto tarefa é o correto
+            print(f"Tarefa '{tarefa.get('title')}' excluída com sucesso! 👍")
+        else:
+            print("Exclusão cancelada.")
     else:
-        print(f"Tarefa com ID {task_id} não encontrada.")
+        print(f"Tarefa com ID {id_tarefa} não encontrada.")
 
-def update_task(tasks):
-    """Atualiza uma tarefa existente (título ou data de entrega)."""
+
+def atualizar_tarefa(tarefas):
+    """Atualiza o título ou a data de entrega de uma tarefa existente."""
     print("\n--- Atualizar Tarefa ---")
-    display_tasks(tasks)
-    if not tasks:
+    if not tarefas:
+        print("Nenhuma tarefa para atualizar.")
         return
 
-    try:
-        task_id_str = input("Digite o ID da tarefa que deseja atualizar: ")
-        task_id = int(task_id_str)
-    except ValueError:
-        print("ID inválido. Por favor, digite um número.")
+    exibir_tarefas(tarefas)
+    id_tarefa = _obter_id_tarefa_do_usuario("Digite o ID da tarefa que deseja atualizar: ")
+
+    tarefa_para_atualizar = _encontrar_tarefa_por_id(tarefas, id_tarefa)
+
+    if not tarefa_para_atualizar:
+        print(f"Tarefa com ID {id_tarefa} não encontrada.")
         return
 
-    task_to_update = None
-    for task in tasks:
-        if task.get('id') == task_id:
-            task_to_update = task
+    print(f"\nAtualizando tarefa: '{tarefa_para_atualizar.get('title')}' (ID: {id_tarefa})")
+    print("Deixe o campo em branco se não quiser alterar o valor atual.")
+
+    novo_titulo = input(f"Novo título (atual: '{tarefa_para_atualizar.get('title')}'): ").strip()
+    if novo_titulo:
+        tarefa_para_atualizar['title'] = novo_titulo
+        print("Título atualizado!")
+
+    while True:
+        nova_data_entrega_str = input(f"Nova data de entrega (AAAA-MM-DD, atual: '{tarefa_para_atualizar.get('dueDate') or 'Não definida'}'): ").strip()
+        if not nova_data_entrega_str: # Usuário deixou em branco, não altera
             break
-
-    if not task_to_update:
-        print(f"Tarefa com ID {task_id} não encontrada.")
-        return
-
-    print(f"Atualizando tarefa: '{task_to_update.get('title')}' (ID: {task_id})")
-    print("O que você deseja atualizar?")
-    print("1. Título")
-    print("2. Data de Entrega")
-    print("0. Cancelar")
+        if _validar_formato_data(nova_data_entrega_str):
+            tarefa_para_atualizar['dueDate'] = nova_data_entrega_str
+            print("Data de entrega atualizada!")
+            break
+        print("Formato de data inválido. Por favor, use AAAA-MM-DD ou deixe em branco para não alterar.")
     
-    update_choice = input("Escolha uma opção: ")
-
-    if update_choice == '1':
-        new_title = input("Digite o novo título: ")
-        task_to_update['title'] = new_title
-        print("Título atualizado com sucesso!")
-    elif update_choice == '2':
-        new_dueDate = input("Digite a nova data de entrega (AAAA-MM-DD): ")
-        task_to_update['dueDate'] = new_dueDate
-        print("Data de entrega atualizada com sucesso!")
-    elif update_choice == '0':
-        print("Atualização cancelada.")
+    if not novo_titulo and not (nova_data_entrega_str and _validar_formato_data(nova_data_entrega_str)): # Verifica se algo foi realmente alterado
+        print("Nenhuma alteração realizada.")
     else:
-        print("Opção de atualização inválida.")
+        print("\nTarefa atualizada com sucesso!")
 
 def main():
-    """Função principal da aplicação."""
-    tasks = load_tasks()
+    """Função principal da aplicação de gerenciamento de tarefas."""
+    tarefas = carregar_tarefas()
+
+    print("Bem-vindo ao seu Gerenciador de Tarefas Pessoal! 🚀")
 
     while True:
         print("\n--- Menu Principal ---")
         print("1. Listar tarefas")
         print("2. Adicionar nova tarefa")
         print("3. Marcar tarefa como concluída")
-        print("4. Excluir tarefa")
-        print("5. Atualizar tarefa")
+        print("4. Atualizar tarefa")
+        print("5. Excluir tarefa")
         print("0. Sair")
 
-        choice = input("Escolha uma opção: ")
+        escolha = input("O que você gostaria de fazer? Escolha uma opção: ")
 
-        if choice == '1':
-            display_tasks(tasks)
-        elif choice == '2':
-            add_task(tasks)
-            save_tasks(tasks)
-        elif choice == '3':
-            mark_task_done(tasks)
-            save_tasks(tasks)
-        elif choice == '4':
-            delete_task(tasks)
-            save_tasks(tasks)
-        elif choice == '5':
-            update_task(tasks)
-            save_tasks(tasks)
-        elif choice == '0':
-            print("Saindo do gerenciador de tarefas. Até logo!")
+        if escolha == '1':
+            exibir_tarefas(tarefas)
+        elif escolha == '2':
+            adicionar_tarefa(tarefas)
+            salvar_tarefas(tarefas)
+        elif escolha == '3':
+            marcar_tarefa_concluida(tarefas)
+            salvar_tarefas(tarefas)
+        elif escolha == '4':
+            atualizar_tarefa(tarefas)
+            salvar_tarefas(tarefas)
+        elif escolha == '5':
+            excluir_tarefa(tarefas)
+            salvar_tarefas(tarefas)
+        elif escolha == '0':
+            print("\nObrigado por usar o Gerenciador de Tarefas! Até a próxima! 👋")
             break
         else:
-            print("Opção inválida. Por favor, tente novamente.")
+            print("Opção inválida. Por favor, escolha um número do menu.")
 
 if __name__ == "__main__":
-    main() 
+    main()
