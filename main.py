@@ -13,7 +13,7 @@ def load_tasks():
             return tasks
     except (json.JSONDecodeError, IOError) as e:
         print(f"Erro ao carregar as tarefas: {e}")
-        return [] # Retorna lista vazia se houver erro ou o arquivo estiver vazio/mal formatado
+        return [] 
 
 def save_tasks(tasks):
     """Salva a lista de tarefas no arquivo JSON."""
@@ -43,16 +43,11 @@ def add_task(tasks):
     title = input("Digite o título da tarefa: ")
     dueDate = input("Digite a data de entrega (ex: AAAA-MM-DD): ")
 
-    # Gerar novo ID
     new_id = 1
     if tasks:
-        # Encontra o maior ID existente e adiciona 1
-        # Certifique-se de que todos os IDs são inteiros para max() funcionar corretamente
-        # ou filtre/converta IDs não numéricos se necessário.
         ids = [task.get('id', 0) for task in tasks if isinstance(task.get('id'), int)]
-        if ids: # se houver IDs numéricos
+        if ids:
             new_id = max(ids) + 1
-        # Se não houver IDs numéricos (ex: lista vazia ou tasks com IDs não-int), new_id continua 1
 
     new_task = {
         "id": new_id,
@@ -66,9 +61,9 @@ def add_task(tasks):
 def mark_task_done(tasks):
     """Marca uma tarefa como concluída."""
     print("\n--- Marcar Tarefa como Concluída ---")
-    display_tasks(tasks) # Mostrar tarefas para o usuário saber o ID
+    display_tasks(tasks)
     if not tasks:
-        return # Se não há tarefas, não há nada a fazer
+        return
 
     try:
         task_id_str = input("Digite o ID da tarefa que deseja marcar como concluída: ")
@@ -103,15 +98,11 @@ def delete_task(tasks):
         return
 
     original_task_count = len(tasks)
-    # Usamos uma compreensão de lista para recriar a lista sem a tarefa a ser excluída
-    # Isso é mais seguro do que modificar a lista enquanto iteramos sobre ela
     tasks_to_keep = [task for task in tasks if task.get('id') != task_id]
     
     if len(tasks_to_keep) < original_task_count:
-        # Atualiza a lista original de tarefas. Precisamos fazer isso de forma a modificar
-        # a lista original que foi passada como argumento, e não criar uma nova local.
-        tasks.clear() # Remove todos os itens da lista original
-        tasks.extend(tasks_to_keep) # Adiciona todos os itens da lista filtrada
+        tasks.clear()
+        tasks.extend(tasks_to_keep)
         print(f"Tarefa com ID {task_id} excluída com sucesso!")
     else:
         print(f"Tarefa com ID {task_id} não encontrada.")
@@ -172,7 +163,6 @@ def main():
         print("3. Marcar tarefa como concluída")
         print("4. Excluir tarefa")
         print("5. Atualizar tarefa")
-        # Adicionaremos mais opções aqui no futuro (atualizar, deletar, etc.)
         print("0. Sair")
 
         choice = input("Escolha uma opção: ")
@@ -181,16 +171,16 @@ def main():
             display_tasks(tasks)
         elif choice == '2':
             add_task(tasks)
-            save_tasks(tasks) # Salva após adicionar uma nova tarefa
+            save_tasks(tasks)
         elif choice == '3':
             mark_task_done(tasks)
-            save_tasks(tasks) # Salva após modificar uma tarefa
+            save_tasks(tasks)
         elif choice == '4':
             delete_task(tasks)
-            save_tasks(tasks) # Salva após excluir uma tarefa
+            save_tasks(tasks)
         elif choice == '5':
             update_task(tasks)
-            save_tasks(tasks) # Salva após atualizar uma tarefa
+            save_tasks(tasks)
         elif choice == '0':
             print("Saindo do gerenciador de tarefas. Até logo!")
             break
