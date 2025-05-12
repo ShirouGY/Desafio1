@@ -17,7 +17,7 @@ def carregar_tarefas():
     try:
         with open(ARQUIVO_TAREFAS, 'r', encoding='utf-8') as file:
             tarefas = json.load(file)
-            if not isinstance(tarefas, list) or not all(isinstance(t, dict) for t in tarefas): ## verificar com IA
+            if not isinstance(tarefas, list) or not all(isinstance(t, dict) for t in tarefas):
                 print(f"{Colors.RED}Formato de arquivo vazio.{Colors.RESET}")
                 return []
             return tarefas
@@ -34,7 +34,7 @@ def salvar_tarefas(tarefas):
 
 def validar_formato_da_data(data_str):
     try:
-        datetime.datetime.strptime(data_str, '%Y-%m-%d') ## pq datetime.datetime.strptime?
+        datetime.datetime.strptime(data_str, '%Y-%m-%d') 
         return True
     except ValueError:
         return False
@@ -49,7 +49,7 @@ def exibir_tarefas(tarefas):
         status_legivel = f"{Colors.GREEN}Concluída ✅{Colors.RESET}" if tarefa.get('status') == STATUS_CONCLUIDA else f"{Colors.RED}Pendente ⏳{Colors.RESET}"
         data_entrega = tarefa.get('dueDate') or "Não definida"
         print(f"  ID: {tarefa.get('id')}")
-        print(f"  Nome: {tarefa.get('nome')}")
+        print(f"  Nome: {tarefa.get('title')}")
         print(f"  Status: {status_legivel}")
         print(f"  Data de Entrega: {data_entrega}")
         print("  --------------------")
@@ -69,13 +69,13 @@ def adicionar_tarefa(tarefas):
 
     novo_id = 1
     if tarefas:
-        ids_existentes = [t.get('id', 0) for t in tarefas if isinstance(t.get('id'), int)]  ## como explicar isso
+        ids_existentes = [t.get('id', 0) for t in tarefas if isinstance(t.get('id'), int)] 
         if ids_existentes:
             novo_id = max(ids_existentes) + 1
 
     nova_tarefa = {
         "id": novo_id,
-        "nome": nome,
+        "title": nome,
         "status": "pendente",
         "dueDate": data_entrega_str if data_entrega_str else None
     }
@@ -109,10 +109,10 @@ def marcar_tarefa_concluida(tarefas):
 
     if tarefa:
         if tarefa['status'] == STATUS_CONCLUIDA:
-            print(f"{Colors.RED}A tarefa '{tarefa.get('nome')}' (ID: {id_tarefa}) já estava concluída.{Colors.RESET}")
+            print(f"{Colors.RED}A tarefa '{tarefa.get('title')}' (ID: {id_tarefa}) já estava concluída.{Colors.RESET}")
         else:
             tarefa['status'] = STATUS_CONCLUIDA
-            print(f"{Colors.GREEN}Tarefa '{tarefa.get('nome')}' (ID: {id_tarefa}) concluída! 🎉{Colors.RESET}")
+            print(f"{Colors.GREEN}Tarefa '{tarefa.get('title')}' (ID: {id_tarefa}) concluída! 🎉{Colors.RESET}")
     else:
         print(f"{Colors.RED}Tarefa com ID {id_tarefa} não encontrada. 🤔{Colors.RESET}")
 
