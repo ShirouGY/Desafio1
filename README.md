@@ -1,3 +1,46 @@
+# **Decisões Técnicas e Foco na Experiência do Usuário (UX)**
+## Ao desenvolver o Gerenciador de Tarefas, diversas decisões técnicas foram feitas com o objetivo de criar uma aplicação funcional, de fácil manutenção e, com uma boa experiência para o usuário final.
+
+**Linguagem**: Python foi escolhido devido à facilidade em codar, e por ser excelente para o desenvolvimento rápido de aplicações.
+
+**Funções**: O código foi dividido em funções para cada responsabilidade principal (carregar/salvar tarefas, exibir tarefas, adicionar, marcar como concluída, excluir, atualizar). 
+
+# Foco na Experiência do Usuário (UX)
+
+### Menu Interativo:
+Um menu principal com opções é apresentado ao usuário, guiando pelas funções disponíveis.
+
+### Feedback Claro e Consistente:
+
+**Prompts**: As solicitações de entrada de dados como: ("Digite o nome da tarefa:", "Escolha uma opção:") são claras e diretas.
+
+**Confirmações**: Após cada operação for bem-sucedida (adicionar, concluir, excluir, atualizar), uma mensagem de sucesso é exibida, confirmando para o usuário.
+
+**Mensagens de Erro**: Erros de entrada (como um ID não numérico) ou operacionais (como tentar operar sobre uma tarefa com ID inexistente) são comunicados de forma compreensível, orientando o usuário sobre o problema.
+
+## Uso de Cores para Melhorar a visualização:
+
+**Para destacar as informações importantes e melhorar visualmente, foram implementadas cores no terminal**:
+
+**Azul (Colors.BLUE)**: Usado para cabeçalhos de seção, opções de menu, prompts de entrada e rótulos de informações (como "ID:", "Título:"), ajudando a guiar o olhar do usuário.
+
+**Verde (Colors.GREEN)**: Usado para todas as mensagens de sucesso e para indicar tarefas "Concluídas", fornecendo um feedback visual positivo.
+
+**Vermelho (Colors.RED)**: Usado para todas as mensagens de erro, alertas (como tarefa já concluída ao tentar marcar novamente) e para indicar tarefas "Pendentes", chamando a atenção para problemas ou status que requerem ação.
+
+**Reset (Colors.RESET)**: Garante que a cor seja redefinida para o padrão do terminal após cada mensagem colorida, evitando que a formatação "vaze" para outras saídas.
+
+## Exibição Organizada das Tarefas:
+A função exibir_tarefas formata a lista de tarefas de maneira clara, mostrando ID, Título, Status (com um indicador visual como ✅ ou ⏳ e cor) e Data de Entrega. Facilitando a visualização e a identificação das tarefas para as operações seguintes.
+
+**Validação de Entrada**:
+Validações básicas, como verificar se o ID fornecido é um número e ao adicionar tarefas, verifica-se se o nome não está vazio.
+
+
+
+
+
+
 # **📦 Modelo de Negócios**
 
 **Gratuito**: funcionalidades como adicionar/gerenciar listas e marcar como assistido.
