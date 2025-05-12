@@ -1,3 +1,10 @@
+# Para iniciar o projeto basta abrir o terminal e digitar
+
+python main.py
+
+Que o projeto sera inicializado.
+
+
 # **Decisões Técnicas e Foco na Experiência do Usuário (UX)**
 ## Ao desenvolver o Gerenciador de Tarefas, diversas decisões técnicas foram feitas com o objetivo de criar uma aplicação funcional, de fácil manutenção e, com uma boa experiência para o usuário final.
 
@@ -36,10 +43,8 @@ A função exibir_tarefas formata a lista de tarefas de maneira clara, mostrando
 **Validação de Entrada**:
 Validações básicas, como verificar se o ID fornecido é um número e ao adicionar tarefas, verifica-se se o nome não está vazio.
 
-
-
-
-
+# Video:
+https://files.fm/u/axdhpcx9ns
 
 # **📦 Modelo de Negócios**
 
