@@ -1,32 +1,54 @@
-📦 Modelo de Negócios
-Freemium com recursos premium + Publicidade segmentada.
+# **📦 Modelo de Negócios**
 
-Gratuito: funcionalidades básicas como adicionar/gerenciar listas e marcar como assistido.
-Publicidade: anúncios nativos, voltados para o público otaku/geek.
+**Gratuito**: funcionalidades como adicionar/gerenciar listas e marcar como assistido.
 
-🚀 Estratégia para Atrair Primeiros Usuários
-Canais e táticas:
+**Premium**: recursos como:
 
-Redes Sociais e Comunidades Otaku: usar Twitter (X), TikTok e Reddit com conteúdo envolvente, como listas "Top 10 animes para assistir em 2025", memes e reviews.
+Recomendação de animes com base no perfil
 
-Parcerias com Influencers: microinfluenciadores otaku/geek podem apresentar o app como útil e divertido.
+Temas personalizados
 
-App Stores + SEO: otimização para as lojas de aplicativos com boas imagens, vídeos curtos e palavras-chave como “lista de animes”, “assistir anime”.
+Melhor qualidade de streaming
 
-📊 Estimativa de CAC (Custo de Aquisição de Cliente)
-Ads iniciais em redes sociais: R$ 0,50 a R$ 1,50 por clique.
+# **🚀 Estratégia para Atrair Primeiros Usuários**
 
-Conversão estimada: 5% a 10% para instalações.
+## **Canais e táticas**:
 
-CAC inicial médio: R$ 10 a R$ 15 por usuário gratuito, podendo cair para R$ 5 ou menos com engajamento orgânico (via viralização e comunidades).
+**Redes Sociais e Comunidades**: usar Twitter (X), TikTok e Reddit com conteúdos , como listas "Top 10 animes para assistir em 2025", memes e reviews.
 
-CAC para usuário pagante: R$ 25 a R$ 40, inicialmente.
+**Parcerias com Influencers**: influenciadores otakus que podem apresentar o app como útil e divertido.
 
-💰 Proposta de LTV (Lifetime Value)
-Plano Premium mensal: R$ 9,90
+# 📊 **Estimativa de CAC (Custo de Aquisição de Cliente)**
 
-Plano anual: R$ 79,90
+**Ads iniciais em redes sociais**: R$ 0,50 a R$ 1,50 por clique.
 
-Suposição de retenção média: 6 a 12 meses
+**Conversão estimada**: 5% a 10% para instalações.
 
-LTV estimado: R$ 60 a R$ 100 por usuário premium.
+**CAC inicial médio**: R$ 10 a R$ 15 por usuário, podendo cair para R$ 5 ou menos com engajamento orgânico (via viralização e comunidades).
+
+# **💰 Proposta de LTV (Lifetime Value)**
+
+**Plano Premium mensal**: R$ 9,90
+
+**Plano trimestral**: R$ 15,90
+
+**Suposição de retenção média**: 6 a 12 meses
+  
+**LTV estimado**: R$ 60 a R$ 100 por usuário premium.
+
+## **Como aumentar o LTV**:
+
+Cross-sell com lojas de produtos otaku
+
+Acesso antecipado a novas features para usuários pagantes
+
+# **📈 Estratégias de Retenção**
+
+**Gamificação**: pontos por episódios assistidos, conquistas por maratonas, ranking de tempo assistido.
+
+Aviso de novos animes
+
+Sugestões baseadas nos gostos do usuário
+
+
+
