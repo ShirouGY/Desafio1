@@ -123,7 +123,7 @@ Você está mirando principalmente em:
 
 CAC= R$/100 cliente = 0
 
-## 📊 Estimativa de CAC – **COM tempo como custo (realista)**
+## 📊 Estimativa de CAC – **COM tempo como custo **
 
 ### 🎯 Cenário:
 
