@@ -182,16 +182,11 @@ Para aumentar o valor que cada cliente gera ao longo do tempo:
 - Criar metas semanais e progressos.
 - Ter um sistema de “animes concluídos” e “em andamento” para manter o engajamento
 
-### 2. **Upsell ou plano anual**
+### 2. **Plano anual**
 
 - Criar um plano anual com desconto: R$ 79,90/ano (~R$ 6,66/mês)
 
-### 3. **Adicionar recursos premium**
-
-- Listas personalizadas ilimitadas
-- Estatísticas de horas assistidas
-
-### 4. **Sistema de pontos ou conquistas**
+### 3. **Sistema de pontos ou conquistas**
 
 - Recompensas por concluir temporadas
 - Medalhas de quantidade assistidas.
@@ -233,10 +228,9 @@ Usuários que assistem vídeos até o fim (mais valioso)
 
 
 - **Versão premium** com recursos avançados:
-    - Lista ilimitada
     - Estatísticas de animes assistidos
     - Temas customizados
-    - Conquistas/gamificação
+    - Conquistas/pontuações
 
 
 ### Vantagens:
@@ -250,7 +244,7 @@ Usuários que assistem vídeos até o fim (mais valioso)
 
 ## 🔐 Estratégias de retenção
 
-### ✅ 1. **Gamificação**
+### ✅ 1. **Pontuações**
 
 - 🎖️ Pontos por animes marcados como assistidos
 - 🏅 Conquistas como “Maratonador”, “Otaku Clássico”, “Explorer de Gêneros”
@@ -258,7 +252,7 @@ Usuários que assistem vídeos até o fim (mais valioso)
 - 🎯 Missões semanais: “Adicione 3 novos animes à sua lista esta semana”
 
 > Objetivo: transformar a experiência em algo recompensador e divertido.
-> 
+>
 
 ### ✅ 2. **Customização da experiência**
 
